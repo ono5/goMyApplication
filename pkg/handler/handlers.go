@@ -1,13 +1,17 @@
-package main
+package handler
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/ono5/myGoWebApplication/pkg/render"
+)
 
 // Home is the handler for the home page
 func Home(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "home-page.tpml")
+	render.RenderTemplate(w, "home-page.tpml")
 }
 
 // About is the handler for the about page
 func About(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "about-page.tpml")
+	render.RenderTemplate(w, "about-page.tpml")
 }
