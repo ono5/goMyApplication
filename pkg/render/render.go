@@ -6,27 +6,39 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/ono5/myGoWebApplication/pkg/config"
 )
+
+var app *config.AppConfig
+
+// NewTemplates sets the config for the template package
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
 
 // renderTemplate serves as a wrapper and renders
 // a layout and a template from folder /templates to a desired writer
 func RenderTemplate(w http.ResponseWriter, tpml string) {
-	// create a template cache
-	tc, err := createTemplateCache()
-	if err != nil {
-		log.Fatalln("error creating template cache", err)
+	var tc map[string]*template.Template
+	if app.UseCache {
+		// get the template cache from the app config
+		tc = app.TemplateCache
+
+	} else {
+		tc, _ = CreateTemplateCache()
 	}
 
 	// get the right template from cache
 	t, ok := tc[tpml]
 	if !ok {
-		log.Fatalln("template not in chche for some reason ", err)
+		log.Fatalln("template not in chche for some reason ", ok)
 	}
 
 	// store result in a buffer and bouble-check if it is a valid value
 	buf := new(bytes.Buffer)
 
-	err = t.Execute(buf, nil)
+	err := t.Execute(buf, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -38,7 +50,7 @@ func RenderTemplate(w http.ResponseWriter, tpml string) {
 	}
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	theCache := map[string]*template.Template{}
 
 	// get all available files *.page.tmpl from folder ./templates
