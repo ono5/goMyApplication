@@ -8,7 +8,13 @@ import (
 	"path/filepath"
 
 	"github.com/ono5/myGoWebApplication/pkg/config"
+	"github.com/ono5/myGoWebApplication/pkg/models"
 )
+
+// AddDefaultData contains Data which will be added to data sent to templates
+func AddDafaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
 
 var app *config.AppConfig
 
@@ -19,7 +25,7 @@ func NewTemplates(a *config.AppConfig) {
 
 // renderTemplate serves as a wrapper and renders
 // a layout and a template from folder /templates to a desired writer
-func RenderTemplate(w http.ResponseWriter, tpml string) {
+func RenderTemplate(w http.ResponseWriter, tpml string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	if app.UseCache {
 		// get the template cache from the app config
@@ -38,7 +44,9 @@ func RenderTemplate(w http.ResponseWriter, tpml string) {
 	// store result in a buffer and bouble-check if it is a valid value
 	buf := new(bytes.Buffer)
 
-	err := t.Execute(buf, nil)
+	td = AddDafaultData(td)
+
+	err := t.Execute(buf, td)
 	if err != nil {
 		log.Println(err)
 	}

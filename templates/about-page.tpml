@@ -8,6 +8,8 @@
 			Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt inventore nam itaque consectetur ea
 			nisi ratione nostrum temporibus nulla asperiores doloremque perferendis, quisquam laborum quas eligendi
 			neque veniam officia in.
+			<p>Rick's sidekick Morty doesn't really have a catchphrase but likes to say something like {{index
+				.StringMap "morty"}}</p>
 		</div>
 	</div>
 </div>
