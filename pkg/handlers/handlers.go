@@ -36,6 +36,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 // About is the handler for the about page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	// some dta or calculation takes place
+
 	sidekickMap := make(map[string]string)
 	sidekickMap["morty"] = "Ooh, wee!"
 
