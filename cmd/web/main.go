@@ -17,6 +17,7 @@ const portNumber = ":8080"
 var app config.AppConfig
 var session *scs.SessionManager
 
+// main is the main function
 func main() {
 
 	// don't forget to change to true in Production!
@@ -32,11 +33,11 @@ func main() {
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
-		log.Fatalln("error creating template cache ", err)
+		log.Fatal("cannot create template cache")
 	}
 
 	app.TemplateCache = tc
-	app.UseCache = true
+	app.UseCache = false
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
@@ -54,4 +55,5 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 }

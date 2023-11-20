@@ -9,5 +9,5 @@ type TemplateData struct {
 	CSRFToken string
 	Flash     string
 	Warning   string
-	Eerror    string
+	Error     string
 }
