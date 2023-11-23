@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/justinas/nosurf"
 	"github.com/ono5/myGoWebApplication/pkg/config"
 	"github.com/ono5/myGoWebApplication/pkg/models"
 )
 
 // AddDefaultData contains Data which will be added to data sent to templates
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
-
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
@@ -26,7 +27,7 @@ func NewTemplates(a *config.AppConfig) {
 
 // rendernTemplate serves as a wrapper and renders
 // a layout and a template from folder /templates to a desired writer
-func RenderTemplate(w http.ResponseWriter, tpml string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tpml string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 
 	if app.UseCache {
@@ -45,7 +46,7 @@ func RenderTemplate(w http.ResponseWriter, tpml string, td *models.TemplateData)
 	// store result in a buffer and double-check if it is a valid value
 	buf := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	err := t.Execute(buf, td)
 	if err != nil {
